@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-
 import '../widgets/total_expense_list.dart';
 import '../widgets/all_expense_list.dart';
 import 'add_expense_screen.dart';
+import '../services/firestore_service.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-  // pass title from partent widget
   final String title;
 
   @override
@@ -17,28 +16,41 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  // state
-  final List<Map<String, dynamic>> _categories = [
-    {'name': 'Rent', 'amount': 1550.50, 'date': DateTime(2024, 8, 1)},
-    {'name': 'Grocery', 'amount': 500.00, 'date': DateTime(2024, 8, 15)},
-    {'name': 'Eating-out', 'amount': 75.25, 'date': DateTime(2024, 9, 1)},
-    {'name': 'Bills', 'amount': 40.00, 'date': DateTime(2024, 9, 1)},
-    {'name': 'Miscellanious', 'amount': 95.75, 'date': DateTime(2024, 8, 1)},
-    {'name': 'Miscellanious', 'amount': 90.75, 'date': DateTime(2024, 9, 1)},
-  ];
 
-  // Example current month
+  final FirestoreService _firestoreService = FirestoreService();
+  List<Map<String, dynamic>> _expenses = [];
   DateTime _currentMonth = DateTime.now();
 
-  // Function to calculate total expenses for the selected month
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _fetchExpenses();
+  }
+
+  void _fetchExpenses() async {
+    List<Map<String, dynamic>> expenses =
+        await _firestoreService.getExpensesForMonth(_currentMonth);
+    setState(() {
+      _expenses = expenses;
+    });
+  }
+
+  void _deleteExpense(int index) async {
+    print(_expenses);
+    String documentId = _expenses[index]['id'];
+    await _firestoreService.deleteExpense(documentId);
+    _fetchExpenses(); // Refresh the list after deletion
+  }
+
   double get _totalExpense {
-    return _filteredExpenses.fold(0.0, (sum, item) => sum + item['amount']);
+    return _expenses.fold(0.0, (sum, item) => sum + item['amount']);
   }
 
   Map<String, double> get _groupedExpenses {
     Map<String, double> groupedExpenses = {};
 
-    for (var expense in _filteredExpenses) {
+    for (var expense in _expenses) {
       String category = expense['name'];
       double amount = expense['amount'];
 
@@ -52,25 +64,17 @@ class _MyHomePageState extends State<MyHomePage>
     return groupedExpenses;
   }
 
-  // Function to get the filtered list of expenses based on the selected month
-  List<Map<String, dynamic>> get _filteredExpenses {
-    return _categories.where((expense) {
-      return expense['date']?.month == _currentMonth.month &&
-          expense['date'].year == _currentMonth.year;
-    }).toList();
-  }
-
-  // Function to go to the previous month
   void _previousMonth() {
     setState(() {
       _currentMonth = DateTime(_currentMonth.year, _currentMonth.month - 1);
+      _fetchExpenses();
     });
   }
 
-  // Function to go to the next month
   void _nextMonth() {
     setState(() {
       _currentMonth = DateTime(_currentMonth.year, _currentMonth.month + 1);
+      _fetchExpenses();
     });
   }
 
@@ -78,13 +82,7 @@ class _MyHomePageState extends State<MyHomePage>
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => const AddExpenseScreen()),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    ).then((_) => _fetchExpenses()); // Fetch expenses after adding a new one
   }
 
   @override
@@ -146,13 +144,8 @@ class _MyHomePageState extends State<MyHomePage>
 
                   // Second Tab: Monthly Details with all expenses
                   AllExpenseList(
-                    expenses: _filteredExpenses,
-                    onDelete: (index) {
-                      setState(() {
-                        _filteredExpenses.removeAt(
-                            index); // Remove the expense from the list
-                      });
-                    },
+                    expenses: _expenses,
+                    onDelete: _deleteExpense,
                   ),
                 ],
               ),
@@ -161,12 +154,12 @@ class _MyHomePageState extends State<MyHomePage>
         ),
       ),
 
-      // add expnese button
+      // Add Expense button
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToAddExpense,
-        tooltip: 'add',
+        tooltip: 'Add',
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }
