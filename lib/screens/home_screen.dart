@@ -1,3 +1,5 @@
+import 'package:financial_tracker/models/Expense.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../widgets/total_expense_list.dart';
 import '../widgets/all_expense_list.dart';
@@ -19,7 +21,7 @@ class _MyHomePageState extends State<MyHomePage>
   late TabController _tabController;
 
   final FirestoreService _firestoreService = FirestoreService();
-  List<Map<String, dynamic>> _expenses = [];
+  List<Expense> _expenses = [];
   DateTime _currentMonth = DateTime.now();
   bool _isLoading = true;
 
@@ -34,23 +36,34 @@ class _MyHomePageState extends State<MyHomePage>
     setState(() {
       _isLoading = true; // Start loading
     });
-    List<Map<String, dynamic>> expenses =
-        await _firestoreService.getExpensesForMonth(_currentMonth);
-    setState(() {
-      _expenses = expenses;
-      _isLoading = false; // End loading
-    });
+
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      List<Expense> expenses =
+          await _firestoreService.getExpensesForMonth(_currentMonth, user.uid);
+
+      setState(() {
+        _expenses = expenses; // Update with list of Expense objects
+        _isLoading = false; // End loading
+      });
+    } else {
+      setState(() {
+        _isLoading = false; // End loading if no user
+      });
+      // Handle the case where no user is logged in
+      print('No user is logged in');
+    }
   }
 
   void _deleteExpense(int index) async {
     print(_expenses);
-    String documentId = _expenses[index]['id'];
+    String documentId = _expenses[index].id;
     await _firestoreService.deleteExpense(documentId);
     _fetchExpenses(); // Refresh the list after deletion
   }
 
   double get _totalExpense {
-    return _expenses.fold(0.0, (sum, item) => sum + item['amount']);
+    return _expenses.fold(0.0, (sum, item) => sum + item.amount);
   }
 
   // sum total expenses
@@ -58,8 +71,8 @@ class _MyHomePageState extends State<MyHomePage>
     Map<String, double> groupedExpenses = {};
 
     for (var expense in _expenses) {
-      String category = expense['name'];
-      double amount = expense['amount'];
+      String category = expense.category;
+      double amount = expense.amount;
 
       if (groupedExpenses.containsKey(category)) {
         groupedExpenses[category] = groupedExpenses[category]! + amount;
