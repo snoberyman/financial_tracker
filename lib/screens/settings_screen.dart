@@ -6,7 +6,10 @@ class SettingsScreen extends StatelessWidget {
 
   void _signOut(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
-    Navigator.of(context).pushReplacementNamed('/signin');
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      '/signin',
+      (Route<dynamic> route) => false,
+    );
   }
 
   @override
@@ -48,7 +51,7 @@ class SettingsScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 32, vertical: 12),
-                    textStyle: const TextStyle(fontSize: 18),
+                    textStyle: const TextStyle(fontSize: 18, color: Colors.red),
                   ),
                   child: const Text('Sign Out'),
                 ),

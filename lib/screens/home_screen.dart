@@ -21,6 +21,7 @@ class _MyHomePageState extends State<MyHomePage>
   final FirestoreService _firestoreService = FirestoreService();
   List<Map<String, dynamic>> _expenses = [];
   DateTime _currentMonth = DateTime.now();
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -30,10 +31,14 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   void _fetchExpenses() async {
+    setState(() {
+      _isLoading = true; // Start loading
+    });
     List<Map<String, dynamic>> expenses =
         await _firestoreService.getExpensesForMonth(_currentMonth);
     setState(() {
       _expenses = expenses;
+      _isLoading = false; // End loading
     });
   }
 
@@ -121,54 +126,57 @@ class _MyHomePageState extends State<MyHomePage>
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Month Selector
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_left),
-                  onPressed: _previousMonth,
-                ),
-                Text(
-                  '${_currentMonth.month}/${_currentMonth.year}',
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.arrow_right),
-                  onPressed: _nextMonth,
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-
-            // Tabs Content
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator()) // Show loading indicator
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // First Tab: Overview with total_expense_list
-                  TotalExpenseList(
-                    groupedExpenses: _groupedExpenses,
-                    totalExpense: _totalExpense,
+                  // Month Selector
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_left),
+                        onPressed: _previousMonth,
+                      ),
+                      Text(
+                        '${_currentMonth.month}/${_currentMonth.year}',
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.arrow_right),
+                        onPressed: _nextMonth,
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 20),
 
-                  // Second Tab: Monthly Details with all expenses
-                  AllExpenseList(
-                    expenses: _expenses,
-                    onDelete: _deleteExpense,
+                  // Tabs Content
+                  Expanded(
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        // First Tab: Overview with total_expense_list
+                        TotalExpenseList(
+                          groupedExpenses: _groupedExpenses,
+                          totalExpense: _totalExpense,
+                        ),
+
+                        // Second Tab: Monthly Details with all expenses
+                        AllExpenseList(
+                          expenses: _expenses,
+                          onDelete: _deleteExpense,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
 
       // Add Expense button
       floatingActionButton: FloatingActionButton(
