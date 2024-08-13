@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-import 'screens/home_screen.dart';
+import 'screens/sign_up_screen.dart';
+import 'screens/sign_in_screen.dart';
+import 'screens/auth_home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,8 +29,14 @@ class MyApp extends StatelessWidget {
             seedColor: const Color.fromARGB(255, 255, 191, 28)),
         useMaterial3: true,
       ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const SignInScreen(),
+        '/signup': (context) => SignUpScreen(),
+        '/home': (context) =>
+            const AuthenticatedHome(title: 'Financial Tracker'),
+      },
       // home screen
-      home: const MyHomePage(title: 'Financial Tracker'),
     );
   }
 }
