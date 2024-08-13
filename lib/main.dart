@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'screens/sign_up_screen.dart';
 import 'screens/sign_in_screen.dart';
 import 'screens/auth_home_screen.dart';
+
+import 'services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,12 +34,30 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const SignInScreen(),
+        '/signin': (context) => const SignInScreen(),
         '/signup': (context) => SignUpScreen(),
         '/home': (context) =>
             const AuthenticatedHome(title: 'Financial Tracker'),
       },
+
       // home screen
+      home: StreamBuilder<User?>(
+        stream: AuthService().user,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.active) {
+            User? user = snapshot.data;
+            print('uset content');
+            print(user);
+            if (user == null) {
+              return SignInScreen();
+            } else {
+              return AuthenticatedHome(title: 'Financial Tracker');
+            }
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
     );
   }
 }

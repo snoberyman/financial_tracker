@@ -3,6 +3,7 @@ import '../widgets/total_expense_list.dart';
 import '../widgets/all_expense_list.dart';
 import 'add_expense_screen.dart';
 import '../services/firestore_service.dart';
+import 'settings_screen.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -47,6 +48,7 @@ class _MyHomePageState extends State<MyHomePage>
     return _expenses.fold(0.0, (sum, item) => sum + item['amount']);
   }
 
+  // sum total expenses
   Map<String, double> get _groupedExpenses {
     Map<String, double> groupedExpenses = {};
 
@@ -64,6 +66,7 @@ class _MyHomePageState extends State<MyHomePage>
     return groupedExpenses;
   }
 
+  // select mont navigator
   void _previousMonth() {
     setState(() {
       _currentMonth = DateTime(_currentMonth.year, _currentMonth.month - 1);
@@ -85,6 +88,13 @@ class _MyHomePageState extends State<MyHomePage>
     ).then((_) => _fetchExpenses()); // Fetch expenses after adding a new one
   }
 
+  void _navigateToSettings() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SettingsScreen()),
+    );
+  }
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -97,6 +107,12 @@ class _MyHomePageState extends State<MyHomePage>
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: _navigateToSettings, // Navigate to settings screen
+          ),
+        ],
         bottom: TabBar(
           controller: _tabController,
           tabs: const [

@@ -16,7 +16,7 @@ class TotalExpenseList extends StatelessWidget {
       children: [
         // Expense Categories
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.60,
+          height: MediaQuery.of(context).size.height * 0.50,
           child: ListView.builder(
             itemCount: groupedExpenses.length,
             itemBuilder: (ctx, index) {
