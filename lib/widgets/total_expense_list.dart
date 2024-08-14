@@ -12,6 +12,14 @@ class TotalExpenseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (groupedExpenses.isEmpty) {
+      return const Center(
+        child: Text(
+          'No records found',
+          style: TextStyle(fontSize: 18, color: Colors.grey),
+        ),
+      );
+    }
     return Column(
       children: [
         // Expense Categories

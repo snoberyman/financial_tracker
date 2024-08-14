@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../widgets/add_expense_btn.dart';
-
 import 'home_screen.dart';
 import 'categories_screen.dart';
 import 'reports_screen.dart';

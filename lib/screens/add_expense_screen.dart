@@ -77,12 +77,17 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         // Add the expense to Firestore
         await firestoreService
             .addExpense(
-              category: expense.category,
-              date: expense.date,
-              amount: expense.amount,
-              userId: user.uid, // Pass user ID
-            )
-            .then((_) => Navigator.pop(context));
+          category: expense.category,
+          date: expense.date,
+          amount: expense.amount,
+          userId: user.uid, // Pass user ID
+        )
+            .then((_) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            '/home',
+            (Route<dynamic> route) => false,
+          ); // Pop the screen after adding the expense
+        });
       } else {
         // Handle the case where the user is not logged in
         print('No user is logged in');

@@ -17,6 +17,15 @@ class AllExpenseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // If the expenses list is empty, show a message
+    if (expenses.isEmpty) {
+      return const Center(
+        child: Text(
+          'No records found',
+          style: TextStyle(fontSize: 18, color: Colors.grey),
+        ),
+      );
+    }
     return Column(
       children: [
         Expanded(
