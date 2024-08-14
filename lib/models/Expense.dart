@@ -5,6 +5,13 @@ class Expense {
   final String category;
   final DateTime date;
   final double amount;
+  // description
+  // payment method
+  // recuring
+  // location
+  // created at
+  // updated at
+  // type: personal, business, and
 
   Expense({
     required this.id,

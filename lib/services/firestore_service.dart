@@ -12,33 +12,38 @@ class FirestoreService {
     required String userId,
   }) async {
     try {
-      await _db.collection('Expenses').add({
+      await _db.collection('users').doc(userId).collection('expenses').add({
         'category': category,
         'date': date,
         'amount': amount,
-        'userId': userId,
       });
     } catch (e) {
       print('Error adding expense: $e');
     }
   }
 
+// Method to get expenses for a user for a single month
   Future<List<Expense>> getExpensesForMonth(
       DateTime month, String userId) async {
     try {
-      final startOfMonth = DateTime(month.year, month.month, 1);
-      final endOfMonth = DateTime(month.year, month.month + 1, 0);
-      final snapshot = await _db
-          .collection('Expenses')
-          .where('userId', isEqualTo: userId)
-          .where('date', isGreaterThanOrEqualTo: startOfMonth)
-          .where('date', isLessThanOrEqualTo: endOfMonth)
+      QuerySnapshot querySnapshot = await _db
+          .collection('users')
+          .doc(userId)
+          .collection('expenses')
+          .where('date',
+              isGreaterThanOrEqualTo: DateTime(month.year, month.month, 1))
+          .where('date',
+              isLessThanOrEqualTo: DateTime(month.year, month.month + 1, 0))
           .get();
 
-      return snapshot.docs
-          .map((doc) =>
-              Expense.fromMap(doc.id, doc.data() as Map<String, dynamic>))
-          .toList();
+      return querySnapshot.docs.map((doc) {
+        return Expense(
+          id: doc.id,
+          category: doc['category'],
+          date: (doc['date'] as Timestamp).toDate(),
+          amount: doc['amount'],
+        );
+      }).toList();
     } catch (e) {
       print('Error fetching expenses: $e');
       return [];
@@ -46,9 +51,14 @@ class FirestoreService {
   }
 
   // Method to delete an expense by its document ID
-  Future<void> deleteExpense(String documentId) async {
+  Future<void> deleteExpense(String userId, String expenseId) async {
     try {
-      await _db.collection('Expenses').doc(documentId).delete();
+      await _db
+          .collection('users')
+          .doc(userId)
+          .collection('expenses')
+          .doc(expenseId)
+          .delete();
     } catch (e) {
       print('Error deleting expense: $e');
     }

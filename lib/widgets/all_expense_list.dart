@@ -19,8 +19,7 @@ class AllExpenseList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.65,
+        Expanded(
           child: Scrollbar(
             thumbVisibility: true,
             controller: controller,

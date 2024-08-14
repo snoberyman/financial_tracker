@@ -7,16 +7,14 @@ import 'add_expense_screen.dart';
 import '../services/firestore_service.dart';
 import 'settings_screen.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomeScreen> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage>
+class _MyHomePageState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -56,9 +54,13 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   void _deleteExpense(int index) async {
-    String documentId = _expenses[index].id;
-    await _firestoreService.deleteExpense(documentId);
-    _fetchExpenses(); // Refresh the list after deletion
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      String documentId = _expenses[index].id;
+      await _firestoreService.deleteExpense(user.uid, documentId);
+      _fetchExpenses(); // Refresh the list after deletion
+    }
   }
 
   double get _totalExpense {
@@ -122,14 +124,15 @@ class _MyHomePageState extends State<MyHomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: _navigateToSettings, // Navigate to settings screen
-          ),
-        ],
+        // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        // title: Text(widget.title),
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.settings),
+        //     onPressed: _navigateToSettings, // Navigate to settings screen
+        //   ),
+        // ],
+        toolbarHeight: 0,
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
@@ -191,11 +194,11 @@ class _MyHomePageState extends State<MyHomePage>
             ),
 
       // Add Expense button
-      floatingActionButton: FloatingActionButton(
-        onPressed: _navigateToAddExpense,
-        tooltip: 'Add',
-        child: const Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _navigateToAddExpense,
+      //   tooltip: 'Add',
+      //   child: const Icon(Icons.add),
+      // ),
     );
   }
 }

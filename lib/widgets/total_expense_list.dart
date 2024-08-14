@@ -15,8 +15,8 @@ class TotalExpenseList extends StatelessWidget {
     return Column(
       children: [
         // Expense Categories
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.50,
+        // Expanded ListView for scrolling
+        Expanded(
           child: ListView.builder(
             itemCount: groupedExpenses.length,
             itemBuilder: (ctx, index) {
@@ -67,6 +67,9 @@ class TotalExpenseList extends StatelessWidget {
             ],
           ),
         ),
+        const SizedBox(
+          height: 20,
+        )
       ],
     );
   }

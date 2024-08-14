@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
-
-  void _signOut(BuildContext context) async {
-    await FirebaseAuth.instance.signOut().then((_) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-        '/signin',
-        (Route<dynamic> route) => false,
-      );
-    });
-  }
+class ReportsScreen extends StatelessWidget {
+  const ReportsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,15 +38,7 @@ class SettingsScreen extends StatelessWidget {
             // Sign Out button in the center
             Expanded(
               child: Center(
-                child: ElevatedButton(
-                  onPressed: () => _signOut(context),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 32, vertical: 12),
-                    textStyle: const TextStyle(fontSize: 18, color: Colors.red),
-                  ),
-                  child: const Text('Sign Out'),
-                ),
+                child: Text('Reports Screen'),
               ),
             ),
           ],
