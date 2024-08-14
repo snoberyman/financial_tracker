@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/signin': (context) => const SignInScreen(),
-        '/signup': (context) => SignUpScreen(),
+        '/signup': (context) => const SignUpScreen(),
         '/home': (context) =>
             const AuthenticatedHome(title: 'Financial Tracker'),
       },
@@ -46,15 +46,14 @@ class MyApp extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
             User? user = snapshot.data;
-            print('uset content');
-            print(user);
+
             if (user == null) {
-              return SignInScreen();
+              return const SignInScreen();
             } else {
-              return AuthenticatedHome(title: 'Financial Tracker');
+              return const AuthenticatedHome(title: 'Financial Tracker');
             }
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),

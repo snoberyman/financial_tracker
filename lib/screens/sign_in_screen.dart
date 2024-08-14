@@ -47,14 +47,15 @@ class _SignInScreenState extends State<SignInScreen> {
 
     if (!isValid) return;
 
-    User? user = await _authService.signInWithEmailPassword(email, password);
-    if (user != null) {
-      Navigator.pushReplacementNamed(context, '/home');
-    } else {
-      setState(() {
-        _authError = 'Failed to sign in. Please check your credentials.';
-      });
-    }
+    _authService.signInWithEmailPassword(email, password).then((User? user) {
+      if (user != null) {
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        setState(() {
+          _authError = 'Failed to sign in. Please check your credentials.';
+        });
+      }
+    });
   }
 
   void _navigateToSignUp() {

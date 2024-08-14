@@ -5,11 +5,12 @@ class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   void _signOut(BuildContext context) async {
-    await FirebaseAuth.instance.signOut();
-    Navigator.of(context).pushNamedAndRemoveUntil(
-      '/signin',
-      (Route<dynamic> route) => false,
-    );
+    await FirebaseAuth.instance.signOut().then((_) {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        '/signin',
+        (Route<dynamic> route) => false,
+      );
+    });
   }
 
   @override

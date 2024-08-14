@@ -63,15 +63,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     if (!isValid) return;
 
-    User? user =
-        await _authService.signUpWithEmailPassword(name, email, password);
-    if (user != null) {
-      Navigator.pushReplacementNamed(context, '/home');
-    } else {
-      setState(() {
-        _authError = 'Failed to create account. Please try again.';
-      });
-    }
+    _authService
+        .signUpWithEmailPassword(name, email, password)
+        .then((User? user) {
+      if (user != null) {
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        setState(() {
+          _authError = 'Failed to create account. Please try again.';
+        });
+      }
+    });
   }
 
   void _navigateToSignIn() {

@@ -56,7 +56,6 @@ class _MyHomePageState extends State<MyHomePage>
   }
 
   void _deleteExpense(int index) async {
-    print(_expenses);
     String documentId = _expenses[index].id;
     await _firestoreService.deleteExpense(documentId);
     _fetchExpenses(); // Refresh the list after deletion
