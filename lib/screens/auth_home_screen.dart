@@ -44,7 +44,7 @@ class _AuthenticatedHomeState extends State<AuthenticatedHome> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        toolbarHeight: 30,
       ),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(

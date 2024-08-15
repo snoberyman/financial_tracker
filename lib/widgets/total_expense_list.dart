@@ -20,16 +20,20 @@ class TotalExpenseList extends StatelessWidget {
         ),
       );
     }
+
+    final sortedEntries = groupedExpenses.entries.toList()
+      ..sort((a, b) =>
+          b.value.compareTo(a.value)); // Sort by amount in descending orderd
     return Column(
       children: [
         // Expense Categories
         // Expanded ListView for scrolling
         Expanded(
           child: ListView.builder(
-            itemCount: groupedExpenses.length,
+            itemCount: sortedEntries.length,
             itemBuilder: (ctx, index) {
-              String category = groupedExpenses.keys.elementAt(index);
-              double amount = groupedExpenses[category]!;
+              String category = sortedEntries[index].key;
+              double amount = sortedEntries[index].value;
 
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4.0),

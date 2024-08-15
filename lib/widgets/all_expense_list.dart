@@ -17,6 +17,32 @@ class AllExpenseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // delete confirmation box
+    void showDeleteConfirmation(BuildContext context, int index) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Delete Expense'),
+          content: const Text('Are you sure you want to delete this expense?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(ctx).pop(); // Close the dialog
+              },
+              child: const Text('No'),
+            ),
+            TextButton(
+              onPressed: () {
+                onDelete(index); // Call the delete callback
+                Navigator.of(ctx).pop(); // Close the dialog
+              },
+              child: const Text('Yes'),
+            ),
+          ],
+        ),
+      );
+    }
+
     // If the expenses list is empty, show a message
     if (expenses.isEmpty) {
       return const Center(
@@ -64,7 +90,7 @@ class AllExpenseList extends StatelessWidget {
                           flex: 2,
                           child: Text(
                             '\$${expenses[index].amount.toStringAsFixed(2)}',
-                            style: const TextStyle(fontSize: 18),
+                            style: const TextStyle(fontSize: 16),
                             textAlign:
                                 TextAlign.right, // Aligns text to the right
                           ),
@@ -76,7 +102,7 @@ class AllExpenseList extends StatelessWidget {
                           icon: const Icon(Icons.close),
                           color: Colors.red,
                           onPressed: () =>
-                              onDelete(index), // Call the delete callback
+                              showDeleteConfirmation(context, index),
                         ),
                       ],
                     ),

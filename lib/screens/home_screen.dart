@@ -72,7 +72,6 @@ class _MyHomePageState extends State<HomeScreen>
     Map<String, double> groupedExpenses = {};
 
     for (var expense in _expenses) {
-      print(expense);
       String category = expense.category;
       double amount = expense.amount;
 
