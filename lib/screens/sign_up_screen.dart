@@ -68,11 +68,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
         .then((User? user) {
       if (user != null) {
         Navigator.pushReplacementNamed(context, '/home');
-      } else {
-        setState(() {
-          _authError = 'Failed to create account. Please try again.';
-        });
       }
+    }).catchError((error) {
+      print(error);
+      error = error.toString();
+      final start = error.indexOf('] ');
+      if (start == -1) return error; // If not found, return the original error
+      error = error
+          .substring(start + 2); // Remove everything before and including '] '
+      setState(() {
+        _authError = error; // Display the error message
+      });
     });
   }
 

@@ -86,8 +86,8 @@ class _AuthenticatedHomeState extends State<AuthenticatedHome> {
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.report),
-            label: 'Reports',
+            icon: Icon(Icons.bar_chart),
+            label: 'Stats',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),

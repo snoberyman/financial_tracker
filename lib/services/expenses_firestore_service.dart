@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/Expense.dart';
 
-class FirestoreService {
+class ExpensesFirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   // Method to add an expense
@@ -63,4 +63,6 @@ class FirestoreService {
       print('Error deleting expense: $e');
     }
   }
+
+// Display the categories in a ListView.builder with reorderable logic.
 }

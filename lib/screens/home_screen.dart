@@ -1,11 +1,11 @@
 import 'package:financial_tracker/models/Expense.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import '../widgets/total_expense_list.dart';
 import '../widgets/all_expense_list.dart';
-import 'add_expense_screen.dart';
-import '../services/firestore_service.dart';
-import 'settings_screen.dart';
+
+import '../services/expenses_firestore_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,7 +18,7 @@ class _MyHomePageState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  final FirestoreService _firestoreService = FirestoreService();
+  final ExpensesFirestoreService _firestoreService = ExpensesFirestoreService();
   List<Expense> _expenses = [];
   DateTime _currentMonth = DateTime.now();
   bool _isLoading = true;
@@ -100,19 +100,19 @@ class _MyHomePageState extends State<HomeScreen>
     });
   }
 
-  void _navigateToAddExpense() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const AddExpenseScreen()),
-    ).then((_) => _fetchExpenses()); // Fetch expenses after adding a new one
-  }
+  // void _navigateToAddExpense() {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => const AddExpenseScreen()),
+  //   ).then((_) => _fetchExpenses()); // Fetch expenses after adding a new one
+  // }
 
-  void _navigateToSettings() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const SettingsScreen()),
-    );
-  }
+  // void _navigateToSettings() {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => const SettingsScreen()),
+  //   );
+  // }
 
   @override
   void dispose() {
