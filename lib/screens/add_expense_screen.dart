@@ -26,6 +26,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   String _selectedCategory = 'Rent';
   bool _isButtonEnabled = false;
   List<Category> _categories = []; // Initially empty
+  bool _isLoading = true; // Add loading state
 
   @override
   void initState() {
@@ -51,6 +52,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           _selectedCategory =
               _categories[0].name; // Set the first category as the default
         }
+        _isLoading = false; // Set loading to false after fetching
       });
     }
   }
@@ -116,79 +118,83 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Category Dropdown
-            DropdownButtonFormField<String>(
-              value: _selectedCategory,
-              onChanged: (value) {
-                setState(() {
-                  _selectedCategory = value!;
-                });
-              },
-              items: _categories.map((category) {
-                return DropdownMenuItem<String>(
-                  value: category.name, // Use category.name for the value
-                  child: Text(
-                      category.name), // Display category.name in the dropdown
-                );
-              }).toList(),
-              decoration: const InputDecoration(
-                labelText: 'Category',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 30),
+      body: _isLoading
+          ? const Center(
+              child:
+                  CircularProgressIndicator()) // Show loading indicator while fetching
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Category Dropdown
+                  DropdownButtonFormField<String>(
+                    value: _selectedCategory,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCategory = value!;
+                      });
+                    },
+                    items: _categories.map((category) {
+                      return DropdownMenuItem<String>(
+                        value: category.name, // Use category.name for the value
+                        child: Text(category
+                            .name), // Display category.name in the dropdown
+                      );
+                    }).toList(),
+                    decoration: const InputDecoration(
+                      labelText: 'Category',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
 
-            // Date Picker
-            InkWell(
-              onTap: () => _selectDate(context),
-              child: InputDecorator(
-                decoration: const InputDecoration(
-                  labelText: 'Date',
-                  border: OutlineInputBorder(),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(DateFormat.yMMMd().format(_selectedDate)),
-                    const Icon(Icons.calendar_today),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 30),
+                  // Date Picker
+                  InkWell(
+                    onTap: () => _selectDate(context),
+                    child: InputDecorator(
+                      decoration: const InputDecoration(
+                        labelText: 'Date',
+                        border: OutlineInputBorder(),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(DateFormat.yMMMd().format(_selectedDate)),
+                          const Icon(Icons.calendar_today),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
 
-            // Amount Text Field
-            TextField(
-              controller: _amountController,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              decoration: const InputDecoration(
-                labelText: 'Amount',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 50),
+                  // Amount Text Field
+                  TextField(
+                    controller: _amountController,
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
+                    decoration: const InputDecoration(
+                      labelText: 'Amount',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 50),
 
-            // Add Button
-            ElevatedButton(
-              onPressed: _isButtonEnabled ? _addExpense : null,
-              style: ElevatedButton.styleFrom(
-                foregroundColor:
-                    _isButtonEnabled ? Colors.white : Colors.black54,
-                backgroundColor: _isButtonEnabled
-                    ? Theme.of(context).primaryColor
-                    : Colors.grey, // Font color when enabled/disabled
+                  // Add Button
+                  ElevatedButton(
+                    onPressed: _isButtonEnabled ? _addExpense : null,
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor:
+                          _isButtonEnabled ? Colors.white : Colors.black54,
+                      backgroundColor: _isButtonEnabled
+                          ? Theme.of(context).primaryColor
+                          : Colors.grey, // Font color when enabled/disabled
+                    ),
+                    child: const Text('Add Expense'),
+                  ),
+                ],
               ),
-              child: const Text('Add Expense'),
             ),
-          ],
-        ),
-      ),
     );
   }
 

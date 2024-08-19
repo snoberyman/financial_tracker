@@ -92,7 +92,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final accentColor = Theme.of(context).colorScheme.secondary;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign Up')),
+      appBar: AppBar(),
       body: Stack(
         children: [
           Positioned(
