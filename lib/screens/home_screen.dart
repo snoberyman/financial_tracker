@@ -2,8 +2,8 @@ import 'package:financial_tracker/models/Expense.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/total_expense_list.dart';
-import '../widgets/all_expense_list.dart';
+import '../widgets/expense_total_list.dart';
+import '../widgets/expense_all_list.dart';
 
 import '../services/expenses_firestore_service.dart';
 

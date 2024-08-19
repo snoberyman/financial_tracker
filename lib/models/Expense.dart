@@ -7,11 +7,8 @@ class Expense {
   final double amount;
   // description
   // payment method
-  // recuring
   // location
-  // created at
-  // updated at
-  // type: personal, business, and
+  // recuring
 
   Expense({
     required this.id,

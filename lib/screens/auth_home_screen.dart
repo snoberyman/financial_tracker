@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'home_screen.dart';
 import 'categories_screen.dart';
-import 'reports_screen.dart';
+import 'budget_screen.dart';
 import 'settings_screen.dart';
 import 'add_expense_screen.dart';
 
@@ -23,7 +23,7 @@ class _AuthenticatedHomeState extends State<AuthenticatedHome> {
     const HomeScreen(),
     const CategoriesScreen(),
     const Placeholder(), // Placeholder for the Add Expense item
-    const ReportsScreen(),
+    BudgetScreen(),
     const SettingsScreen(),
   ];
 
@@ -86,8 +86,8 @@ class _AuthenticatedHomeState extends State<AuthenticatedHome> {
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'Stats',
+            icon: Icon(Icons.attach_money),
+            label: 'Budget',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),

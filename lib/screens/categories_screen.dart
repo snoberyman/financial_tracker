@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../models/catgeory.dart'; // Import the Category model
 import '../services/categories_firestore_service.dart'; // Import the Firestore service
 
-import '../widgets/add_category_modal.dart';
+import '../widgets/category_add_modal.dart';
 
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key});
