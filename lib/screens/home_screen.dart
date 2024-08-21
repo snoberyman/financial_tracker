@@ -1,4 +1,3 @@
-import 'package:financial_tracker/models/Expense.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -6,6 +5,7 @@ import '../widgets/expense_total_list.dart';
 import '../widgets/expense_all_list.dart';
 
 import '../services/expenses_firestore_service.dart';
+import '../models/expense.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -40,14 +40,18 @@ class _MyHomePageState extends State<HomeScreen>
       List<Expense> expenses =
           await _firestoreService.getExpensesForMonth(_currentMonth, user.uid);
 
-      setState(() {
-        _expenses = expenses; // Update with list of Expense objects
-        _isLoading = false; // End loading
-      });
+      if (mounted) {
+        setState(() {
+          _expenses = expenses; // Update with list of Expense objects
+          _isLoading = false; // End loading
+        });
+      }
     } else {
-      setState(() {
-        _isLoading = false; // End loading if no user
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false; // End loading
+        });
+      }
       // Handle the case where no user is logged in
       print('No user is logged in');
     }

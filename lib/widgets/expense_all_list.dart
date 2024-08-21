@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/Expense.dart';
+import '../models/expense.dart';
 
 class AllExpenseList extends StatelessWidget {
   final List<Expense> expenses;

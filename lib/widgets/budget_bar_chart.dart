@@ -27,7 +27,8 @@ class BudgetBarChart extends StatelessWidget {
     final maxYValue =
         (budgetData.isNotEmpty && budgetData.any((element) => element > 0))
             ? (budgetData.reduce((a, b) => a > b ? a : b) + 20).toDouble()
-            : 100.00; // Default maxY to 100 if no valid budget data
+            : (expensesData.reduce((a, b) => a > b ? a : b) + 20)
+                .toDouble(); // Default maxY to 100 if no valid budget data
 
     // Ensure budgetData and expensesData have at least 12 values
     final adjustedBudgetData = List<double>.filled(12, 0.0)
