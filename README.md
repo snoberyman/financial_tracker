@@ -1,7 +1,7 @@
 # financial_tracker
 
 ### A mobile application for tracking and managing expenses
-A Flutter app for tracking and managing expenses. I used Firebase Firestore to store data on the cloud. I used Firebase Authentication to authenticate users to use the app.
+A Flutter app for tracking and managing expenses. I used Firebase Firestore to store data on the cloud. I used Firebase Authentication to authenticate users to use the app. (The application is optimized for Android devices only) 
 
 <img src="https://github.com/user-attachments/assets/4ba0f6d2-f122-4d70-a9b1-058f2e2f3ee9" width="200" />
 <img src="https://github.com/user-attachments/assets/a2e48889-fd6e-4190-9e8f-2632b2028c97" width="200" />
@@ -14,7 +14,7 @@ A Flutter app for tracking and managing expenses. I used Firebase Firestore to s
 ## Technology
 
 - Flutter
-- Firebase Firestore
+- Firebase Firestore (NoSQL DB)
 - Firebase Authentication
 
 ## Packages
@@ -25,6 +25,7 @@ A Flutter app for tracking and managing expenses. I used Firebase Firestore to s
 
 ## Features
 
-- **Multiple User Support**:
-- ** **:
+- **User Authentication**: Users sign up/sign in using Firebase Authentication. Each user's data is private.
+- **Multiple User Support**: Every user has a separate account with their own expenses, budgets, and categories.
+- **Cloud Storage with Firestore**: – Expenses, budgets, and categories are stored in Firestore, ensuring data persistence.
 
